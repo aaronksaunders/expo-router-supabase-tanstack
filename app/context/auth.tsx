@@ -33,6 +33,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export function Provider(props: ProviderProps) {
   const [user, setAuth] = useState<User | null>(null);
   const [authInitialized, setAuthInitialized] = useState<boolean>(false);
+  const router = useRouter();
 
   // This hook will protect the route access based on user authentication.
   const useProtectedRoute = (user: User | null) => {
@@ -40,20 +41,7 @@ export function Provider(props: ProviderProps) {
     const router = useRouter();
 
     // checking that navigation is all good;
-    const [isNavigationReady, setNavigationReady] = useState(false);
-    const rootNavigation = useRootNavigation();
     const navigationState = useRootNavigationState();
-
-    // useEffect(() => {
-    //   const unsubscribe = rootNavigation?.addListener("state", (event) => {
-    //     setTimeout(()=>{setNavigationReady(true);},3000)
-    //   });
-    //   return function cleanup() {
-    //     if (unsubscribe) {
-    //       unsubscribe();
-    //     }
-    //   };
-    // }, [rootNavigation]);
 
     useEffect(() => {
       if (!navigationState?.key || !authInitialized) return;
@@ -69,9 +57,9 @@ export function Provider(props: ProviderProps) {
         router.push("/sign-in");
       } else if (user && inAuthGroup) {
         // Redirect away from the sign-in page.
-        router.push("/(tabs)/home/");
+        router.push("/(tabs)/home");
       }
-    }, [user, segments, authInitialized, isNavigationReady]);
+    }, [user, segments, authInitialized, navigationState?.key]);
   };
 
   useEffect(() => {
@@ -79,6 +67,7 @@ export function Provider(props: ProviderProps) {
       console.log("got user", session?.user?.email);
       setAuthInitialized(true);
       setAuth(session?.user || null);
+      router.push("/(tabs)/home");
     });
   }, []);
 

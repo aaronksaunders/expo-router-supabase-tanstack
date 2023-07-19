@@ -64,12 +64,7 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <QueryClientProvider client={client}>
-        {/* <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false  }} />
-          <Stack.Screen name="image-detail" options={{ headerShown: false }} />
-
-        </Stack> */}
-            <Stack screenOptions={{ headerShown: false }}  />
+        <Stack screenOptions={{ headerShown: false }} />
       </QueryClientProvider>
     </ThemeProvider>
   );
