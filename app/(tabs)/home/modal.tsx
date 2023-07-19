@@ -10,7 +10,7 @@ import {
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useAuth } from "./context/auth";
+import { useAuth } from "../../context/auth";
 import { Link, Stack, useRouter } from "expo-router";
 import { useLayoutEffect } from "react";
 import { FontAwesome } from "@expo/vector-icons";
@@ -50,6 +50,7 @@ export default function ModalScreen() {
         />
         <TouchableOpacity
           onPress={async () => {
+            router.back();
             const { error } = await signOut();
             if (error) {
               Alert.alert("Sign Out Error", error?.message);

@@ -65,7 +65,7 @@ export default function SignIn() {
               passwordRef.current
             );
             if (data) {
-              router.replace("/");
+              router.replace("/(tabs)/home");
             } else {
               console.log("sign in error", error);
               Alert.alert("Login Error", error?.message);

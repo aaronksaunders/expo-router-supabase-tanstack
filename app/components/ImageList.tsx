@@ -1,58 +1,78 @@
-import { FlatList, StyleSheet, Text, View, Dimensions } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  Pressable,
+} from "react-native";
 import { Image } from "expo-image";
 import { useEffect, useState } from "react";
 import { supabaseClient } from "../context/supabase-service";
+import { useQuery } from "@tanstack/react-query";
 
-export default function MyImageList({ files }: { files: any }) {
+export default function MyImageList({
+  files,
+  onItemClick,
+}: {
+  files: any;
+  onItemClick: any;
+}) {
   /**
    *
    * @param param0
    * @returns
    */
-  const Item = ({ item }: any) => {
-    const [url, setURL] = useState<string>();
+  const Item = ({ item, onClick }: any) => {
+    // const [url, setURL] = useState<string>();
     const blurhash =
       "|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[";
 
     /**
-     * helper to conver from blob to base 64 to be rendered,
-     * then set the state variable `setURL`
+     * fetcher to convert from blob to base 64 to be rendered,
      *
      * @param name
      */
     const getImageBlobAndConvert = async (name: string) => {
-      try {
-        const { data: blob, error } = await supabaseClient.storage
-          .from("images")
-          .download(name);
+      const { data: blob, error } = await supabaseClient.storage
+        .from("images")
+        .download(name);
 
-        if (error) throw error;
+      if (error) throw error;
 
-        // convert blob to base64 string
+      // convert blob to base64 string
+      return new Promise<string>((resolve) => {
         const fileReaderInstance = new FileReader();
         fileReaderInstance.readAsDataURL(blob as Blob);
         fileReaderInstance.onload = () => {
-          setURL(fileReaderInstance.result as string);
+          resolve(fileReaderInstance.result as string);
         };
-      } catch (error) {
-        console.log("getImageBlobAndConvert", error);
-      }
+      });
     };
 
-    useEffect(() => {
-      getImageBlobAndConvert(item.name);
-    }, [item.name]);
+    const {
+      isLoading,
+      isError,
+      data: url,
+      error,
+      isFetching,
+      isPreviousData,
+    } = useQuery(["images", item.name], () =>
+      getImageBlobAndConvert(item.name)
+    );
 
     return (
       <View style={styles.item}>
         <Text style={styles.title}>{item.name}</Text>
         <View style={styles.image_container}>
-          <Image
-            source={url}
-            style={styles.image}
-            contentFit="contain"
-            placeholder={blurhash}
-          />
+          <Pressable onPress={onClick}>
+            <Image
+              source={url}
+              style={styles.image}
+              contentFit="contain"
+              placeholder={blurhash}
+            />
+          </Pressable>
         </View>
       </View>
     );
@@ -63,8 +83,10 @@ export default function MyImageList({ files }: { files: any }) {
       data={files}
       renderItem={({ item }) => {
         return item.name !== ".emptyFolderPlaceholder" ? (
-          <Item item={item} />
+          // <Pressable onPress={() => onItemClick(item.name)}>
+          <Item item={item} onClick={() => onItemClick(item.name)} />
         ) : (
+          // </Pressable>
           <></>
         );
       }}

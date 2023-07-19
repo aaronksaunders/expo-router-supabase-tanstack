@@ -5,10 +5,12 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Dimensions,
 } from "react-native";
 import { useAuth } from "../context/auth";
 import { Stack, useRouter } from "expo-router";
 import { useRef } from "react";
+import { Image } from "expo-image";
 
 export default function SignUp() {
   const { signUp } = useAuth();
@@ -21,7 +23,11 @@ export default function SignUp() {
   return (
     <>
       <Stack.Screen options={{ title: "sign up", headerShown: false }} />
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center", marginTop:'20%' }}>
+      <Image
+          style={styles.image}
+          source={require("../../assets/images/hero-image.png")}
+        />
         <View>
           <Text style={styles.label}>UserName</Text>
           <TextInput
@@ -67,7 +73,7 @@ export default function SignUp() {
               userNameRef.current
             );
             if (data) {
-              router.replace("/");
+              router.replace("/(tabs)/home");
             } else {
               console.log(error);
               Alert.alert("Login Error", error?.message);
@@ -81,7 +87,7 @@ export default function SignUp() {
         <View style={{ marginTop: 32 }}>
           <Text
             style={{ fontWeight: "500" }}
-            onPress={() => router.replace("/sign-in")}
+            onPress={() => router.back()}
           >
             Click Here To Return To Sign In Page
           </Text>
@@ -116,5 +122,10 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 16,
+  },
+  image: {
+    width: Dimensions.get("screen").width,
+    height: "33%",
+    backgroundColor: "#0553",
   },
 });

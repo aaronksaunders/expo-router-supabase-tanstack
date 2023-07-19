@@ -1,5 +1,5 @@
 import { User } from "@supabase/supabase-js";
-import { useRootNavigation, useRouter, useSegments } from "expo-router";
+import { useRootNavigation, useRootNavigationState, useRouter, useSegments } from "expo-router";
 import React, { useContext, createContext, useEffect, useState } from "react";
 import { supabaseClient } from "./supabase-service";
 
@@ -42,26 +42,23 @@ export function Provider(props: ProviderProps) {
     // checking that navigation is all good;
     const [isNavigationReady, setNavigationReady] = useState(false);
     const rootNavigation = useRootNavigation();
+    const navigationState = useRootNavigationState();
+
+    // useEffect(() => {
+    //   const unsubscribe = rootNavigation?.addListener("state", (event) => {
+    //     setTimeout(()=>{setNavigationReady(true);},3000)
+    //   });
+    //   return function cleanup() {
+    //     if (unsubscribe) {
+    //       unsubscribe();
+    //     }
+    //   };
+    // }, [rootNavigation]);
 
     useEffect(() => {
-      const unsubscribe = rootNavigation?.addListener("state", (event) => {
-        setNavigationReady(true);
-      });
-      return function cleanup() {
-        if (unsubscribe) {
-          unsubscribe();
-        }
-      };
-    }, [rootNavigation]);
-
-    useEffect(() => {
-      if (!isNavigationReady) {
-        return;
-      }
+      if (!navigationState?.key || !authInitialized) return;
 
       const inAuthGroup = segments[0] === "(auth)";
-
-      if (!authInitialized) return;
 
       if (
         // If the user is not signed in and the initial segment is not anything in the auth group.
@@ -72,7 +69,7 @@ export function Provider(props: ProviderProps) {
         router.push("/sign-in");
       } else if (user && inAuthGroup) {
         // Redirect away from the sign-in page.
-        router.push("/");
+        router.push("/(tabs)/home/");
       }
     }, [user, segments, authInitialized, isNavigationReady]);
   };

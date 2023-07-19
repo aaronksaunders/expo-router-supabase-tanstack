@@ -18,17 +18,17 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <Tabs
+    <Tabs 
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
       }}>
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
           title: 'SQL Data',
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
           headerRight: () => (
-            <Link href="/modal" asChild>
+            <Link href="/(tabs)/home/modal" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
@@ -44,9 +44,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="images"
         options={{
-          title: 'Image Storage',
+          headerShown : false,
           tabBarIcon: ({ color }) => <TabBarIcon name="image" color={color} />,
         }}
       />
