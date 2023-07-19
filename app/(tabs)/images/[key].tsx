@@ -26,7 +26,7 @@ export default function ImageDetail() {
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Stack.Screen options={{ title: "Image Detail", headerShown: true }} />
       <Text>{JSON.stringify(key)}</Text>
-      <Text>{JSON.stringify(data[0],null,2)}</Text>
+      <Text>{data && JSON.stringify(data[0],null,2)}</Text>
       <Text
         onPress={() => {
           // Go back to the previous screen using the imperative API.
