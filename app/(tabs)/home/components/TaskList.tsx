@@ -7,7 +7,7 @@ import {
   Pressable,
 } from "react-native";
 import { useEffect, useState } from "react";
-import { supabaseClient } from "../context/supabase-service";
+import { supabaseClient } from "../../../context/supabase-service";
 import { useQuery } from "@tanstack/react-query";
 
 export default function MyTaskList({

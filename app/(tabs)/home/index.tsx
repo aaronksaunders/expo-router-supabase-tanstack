@@ -1,17 +1,19 @@
-import { Button, Dimensions, Pressable, StyleSheet, useColorScheme } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+} from "react-native";
 
-import { Text, View } from "@/components/Themed";
-import { Link, Stack, useRouter } from "expo-router";
+import { View } from "@/components/Themed";
+import { Stack, useRouter } from "expo-router";
 import { supabaseClient } from "@/app/context/supabase-service";
 import { useQuery } from "@tanstack/react-query";
 import ProgressBar from "react-native-progress/Bar";
-import MyTaskList from "@/app/components/TaskList";
-import { FontAwesome } from "@expo/vector-icons";
-import { Colors } from "react-native/Libraries/NewAppScreen";
+import MyTaskList from "@/app/(tabs)/home/components/TaskList";
+import { AddTaskButton } from "./components/AddTaskButton";
+import { ShowProfileInfo } from "./components/ShowProfileInfo";
 
 export default function TabOneScreen() {
   const router = useRouter();
-  const colorScheme = useColorScheme();
 
   const taskFetcher = async () => {
     const { data, error } = await supabaseClient.from("Tasks").select("*");
@@ -22,42 +24,14 @@ export default function TabOneScreen() {
   const { isLoading, isError, data, error, isFetching, isPreviousData } =
     useQuery(["tasks"], () => taskFetcher(), { keepPreviousData: true });
 
-
-
   return (
     <>
       <Stack.Screen
         options={{
           headerShown: true,
           title: "SQL Data",
-          headerRight: () => (
-            <Link href="/(tabs)/home/add-task-modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="plus-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? "light"].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
-          headerLeft: () => (
-            <Link href="/(tabs)/home/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="user-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? "light"].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
+          headerRight: () => <AddTaskButton />,
+          headerLeft: () => <ShowProfileInfo />,
         }}
       />
       <View style={styles.container}>
@@ -65,7 +39,7 @@ export default function TabOneScreen() {
           <ProgressBar
             style={styles.progressView}
             indeterminate={true}
-            width={Dimensions.get('window').width}
+            width={Dimensions.get("window").width}
           />
         )}
 
@@ -73,7 +47,6 @@ export default function TabOneScreen() {
           files={data}
           onItemClick={(id: string) => router.push(`/(tabs)/home/${id}`)}
         />
-
       </View>
     </>
   );

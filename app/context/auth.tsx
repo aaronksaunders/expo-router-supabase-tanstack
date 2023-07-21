@@ -59,10 +59,10 @@ export function Provider(props: ProviderProps) {
         !inAuthGroup
       ) {
         // Redirect to the sign-in page.
-        router.push("/sign-in");
+        router.replace("/sign-in");
       } else if (user && inAuthGroup) {
         // Redirect away from the sign-in page.
-        router.push("/(tabs)/home");
+        router.replace("/(tabs)/home");
       }
     }, [user, segments, authInitialized, navigationState?.key]);
   };
@@ -72,7 +72,7 @@ export function Provider(props: ProviderProps) {
       console.log("got user", session?.user?.email);
       setAuthInitialized(true);
       setAuth(session?.user || null);
-      router.push("/(tabs)/home");
+      session?.user?.email && router.replace("/(tabs)/home");
     });
   }, []);
 

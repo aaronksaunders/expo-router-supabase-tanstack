@@ -1,21 +1,35 @@
-import { Button, Dimensions, StyleSheet } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+} from "react-native";
 
-import { Text, View } from "@/components/Themed";
+import { View } from "@/components/Themed";
 import { supabaseClient } from "../../context/supabase-service";
 import { useQuery } from "@tanstack/react-query";
 import ProgressBar from "react-native-progress/Bar";
-import MyImageList from "../../components/ImageList";
-import { Stack, useNavigation, useRouter } from "expo-router";
+import MyImageList from "./components/ImageList";
+import { Stack, useRouter } from "expo-router";
 import { useCamera } from "@/app/hooks/useCamera";
-import { StatusBar } from "expo-status-bar";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect } from "react";
+import { CamerButton } from "./components/CamerButton";
 
 export default function TabTwoScreen() {
   const router = useRouter();
+
   const { takePhoto } = useCamera();
 
   const [permission, requestPermission] = ImagePicker.useCameraPermissions();
+
+  /**
+   * used by the camerButton component onPress
+   */
+  const onTakePhoto = async () => {
+    const r = await takePhoto();
+    if (r?.data) {
+      refetch();
+    }
+  };
 
   useEffect(() => {
     if (permission?.status !== ImagePicker.PermissionStatus.GRANTED) {
@@ -31,12 +45,25 @@ export default function TabTwoScreen() {
     return data;
   };
 
-  const { isLoading, isError, data, error, isFetching, isPreviousData, refetch } =
-    useQuery(["images"], () => imageFetcher(), { keepPreviousData: true });
+  const {
+    isLoading,
+    isError,
+    data,
+    error,
+    isFetching,
+    isPreviousData,
+    refetch,
+  } = useQuery(["images"], () => imageFetcher(), { keepPreviousData: true });
 
   return (
     <>
-      <Stack.Screen options={{ headerShown: true, title: "Image Storage" }} />
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: "Image Storage",
+          headerRight: () => <CamerButton onTakePhoto={onTakePhoto} />,
+        }}
+      />
       <View style={styles.container}>
         {(isLoading || isFetching) && (
           <ProgressBar
@@ -49,16 +76,6 @@ export default function TabTwoScreen() {
           files={data}
           onItemClick={(key: string) => router.push(`/(tabs)/images/${key}`)}
         />
-        <Button
-          title="Take Photo"
-          onPress={async () => {
-            const r = await takePhoto();
-            if (r?.data) {
-              refetch()
-            }
-          }}
-          disabled={permission?.status !== ImagePicker.PermissionStatus.GRANTED}
-        ></Button>
       </View>
     </>
   );
