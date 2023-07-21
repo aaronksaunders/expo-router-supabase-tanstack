@@ -19,8 +19,15 @@ export default function TabOneScreen() {
     return data;
   };
 
-  const { isLoading, isError, data, error, isFetching, isPreviousData } =
-    useQuery(["tasks"], () => taskFetcher());
+  const {
+    isLoading,
+    isError,
+    data,
+    error,
+    isFetching,
+    isPreviousData
+  } = useQuery(["tasks"], () => taskFetcher());
+
 
   return (
     <>

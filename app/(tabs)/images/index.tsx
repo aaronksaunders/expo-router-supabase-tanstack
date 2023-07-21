@@ -9,7 +9,6 @@ import { Stack, useNavigation, useRouter } from "expo-router";
 
 export default function TabTwoScreen() {
   const router = useRouter();
-  const navigation = useNavigation();
 
   const imageFetcher = async () => {
     const { data, error } = await supabaseClient.storage.from("images").list();

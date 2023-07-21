@@ -13,5 +13,3 @@ export const supabaseClient = createClient(
     }
   }
 );
-
-console.log(supabaseClient)

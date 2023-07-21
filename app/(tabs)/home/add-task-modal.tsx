@@ -1,4 +1,5 @@
 import {
+  Alert,
   Pressable,
   StyleSheet,
   TextInput,
@@ -11,16 +12,40 @@ import { Stack, useRouter } from "expo-router";
 import { useRef } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { supabaseClient } from "@/app/context/supabase-service";
+import { useAuth } from "@/app/context/auth";
 
 export default function ModalScreen() {
   const colorScheme = useColorScheme();
+  const queryClient = useQueryClient();
 
   const titleRef = useRef("");
   const descriptionRef = useRef("");
   const router = useRouter();
+  const { user } = useAuth();
 
+  const { isError, isSuccess, mutateAsync } = useMutation({
+    mutationFn: async ({
+      title,
+      description,
+      owner,
+    }: {
+      title: string;
+      description: string;
+      owner: string;
+    }) => {
+      const { data, error } = await supabaseClient
+        .from("Tasks")
+        .insert({ title, description, owner })
+        .select("*")
+        .single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: async () => {},
+  });
 
-  
   return (
     <>
       <Stack.Screen
@@ -49,35 +74,42 @@ export default function ModalScreen() {
         }}
       >
         <View style={{ width: "80%", backgroundColor: "transparent" }}>
-            <Text style={styles.label}>Title</Text>
-            <TextInput
-              placeholder="Title"
-              autoCapitalize="none"
-              nativeID="title"
-              onChangeText={(text) => {
-                titleRef.current = text;
-              }}
-              style={styles.textInput}
-            />
-            <Text style={styles.label}>Description</Text>
-            <TextInput
-              placeholder="Description"
-              autoCapitalize="none"
-              nativeID="description"
-              multiline={true}
-              numberOfLines={8}
-              onChangeText={(text) => {
-                descriptionRef.current = text;
-              }}
-              style={styles.textInput}
-            />
+          <Text style={styles.label}>Title</Text>
+          <TextInput
+            placeholder="Title"
+            autoCapitalize="none"
+            nativeID="title"
+            onChangeText={(text) => {
+              titleRef.current = text;
+            }}
+            style={styles.textInput}
+          />
+          <Text style={styles.label}>Description</Text>
+          <TextInput
+            placeholder="Description"
+            autoCapitalize="none"
+            nativeID="description"
+            multiline={true}
+            numberOfLines={8}
+            onChangeText={(text) => {
+              descriptionRef.current = text;
+            }}
+            style={styles.textInput}
+          />
           <TouchableOpacity
             onPress={async () => {
-              router.back();
-              // const { error } = await signOut();
-              // if (error) {
-              //   Alert.alert("Sign Out Error", error?.message);
-              // }
+              try {
+                const response = await mutateAsync({
+                  title: titleRef.current,
+                  description: descriptionRef.current,
+                  owner: user?.id as string,
+                });
+
+                // this forces the update
+                router.replace("/(tabs)/home/");
+              } catch (error) {
+                Alert.alert("Create Task Error", (error as Error)?.message);
+              }
             }}
             style={styles.button}
           >
