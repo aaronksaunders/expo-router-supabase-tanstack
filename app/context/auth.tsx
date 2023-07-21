@@ -1,5 +1,10 @@
 import { User } from "@supabase/supabase-js";
-import { useRootNavigation, useRootNavigationState, useRouter, useSegments } from "expo-router";
+import {
+  useRootNavigation,
+  useRootNavigationState,
+  useRouter,
+  useSegments,
+} from "expo-router";
 import React, { useContext, createContext, useEffect, useState } from "react";
 import { supabaseClient } from "./supabase-service";
 
@@ -127,10 +132,22 @@ export function Provider(props: ProviderProps) {
   ): Promise<SignInResponse> => {
     try {
       console.log(email, password, username);
+      let { error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+      });
 
-      setAuth(user);
-      return { data: user as User, error: undefined };
+      if (error) throw error;
+
+      const { data, error: updateErr } = await supabaseClient.auth.updateUser({
+        data: { username },
+      });
+      if (updateErr) throw updateErr
+
+      setAuth(data.user);
+      return { data: data?.user as User, error: undefined };
     } catch (error) {
+      console.log("login error", error);
       setAuth(null);
       return { error: error as Error, data: undefined };
     }
