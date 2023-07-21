@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, useColorScheme } from "react-native";
+import { Button, Dimensions, Pressable, StyleSheet, useColorScheme } from "react-native";
 
 import { Text, View } from "@/components/Themed";
 import { Link, Stack, useRouter } from "expo-router";
@@ -19,14 +19,9 @@ export default function TabOneScreen() {
     return data;
   };
 
-  const {
-    isLoading,
-    isError,
-    data,
-    error,
-    isFetching,
-    isPreviousData
-  } = useQuery(["tasks"], () => taskFetcher());
+  const { isLoading, isError, data, error, isFetching, isPreviousData } =
+    useQuery(["tasks"], () => taskFetcher(), { keepPreviousData: true });
+
 
 
   return (
@@ -70,7 +65,7 @@ export default function TabOneScreen() {
           <ProgressBar
             style={styles.progressView}
             indeterminate={true}
-            width={200}
+            width={Dimensions.get('window').width}
           />
         )}
 
@@ -78,6 +73,7 @@ export default function TabOneScreen() {
           files={data}
           onItemClick={(id: string) => router.push(`/(tabs)/home/${id}`)}
         />
+
       </View>
     </>
   );
