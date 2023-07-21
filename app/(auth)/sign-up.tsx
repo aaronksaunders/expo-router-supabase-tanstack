@@ -23,12 +23,20 @@ export default function SignUp() {
   return (
     <>
       <Stack.Screen options={{ title: "sign up", headerShown: false }} />
-      <View style={{ flex: 1, justifyContent: "flex-start", alignItems: "center", marginTop:'20%' }}>
-      <Image
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "flex-start",
+          alignItems: "center",
+          paddingTop: "20%",
+          backgroundColor: "#F8F8F9",
+        }}
+      >
+        <Image
           style={styles.image}
           source={require("../../assets/images/hero-image.png")}
         />
-        <View>
+        <View style={{ width: "80%", backgroundColor: "transparent" }}>
           <Text style={styles.label}>UserName</Text>
           <TextInput
             placeholder="Username"
@@ -39,8 +47,6 @@ export default function SignUp() {
             }}
             style={styles.textInput}
           />
-        </View>
-        <View>
           <Text style={styles.label}>Email</Text>
           <TextInput
             placeholder="email"
@@ -51,8 +57,6 @@ export default function SignUp() {
             }}
             style={styles.textInput}
           />
-        </View>
-        <View>
           <Text style={styles.label}>Password</Text>
           <TextInput
             placeholder="password"
@@ -63,34 +67,31 @@ export default function SignUp() {
             }}
             style={styles.textInput}
           />
-        </View>
 
-        <TouchableOpacity
-          onPress={async () => {
-            const { data, error } = await signUp(
-              emailRef.current,
-              passwordRef.current,
-              userNameRef.current
-            );
-            if (data) {
-              router.replace("/(tabs)/home");
-            } else {
-              console.log(error);
-              Alert.alert("Login Error", error?.message);
-            }
-          }}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Create Account</Text>
-        </TouchableOpacity>
-
-        <View style={{ marginTop: 32 }}>
-          <Text
-            style={{ fontWeight: "500" }}
-            onPress={() => router.back()}
+          <TouchableOpacity
+            onPress={async () => {
+              const { data, error } = await signUp(
+                emailRef.current,
+                passwordRef.current,
+                userNameRef.current
+              );
+              if (data) {
+                router.replace("/(tabs)/home");
+              } else {
+                console.log(error);
+                Alert.alert("Login Error", error?.message);
+              }
+            }}
+            style={styles.button}
           >
-            Click Here To Return To Sign In Page
-          </Text>
+            <Text style={styles.buttonText}>Create Account</Text>
+          </TouchableOpacity>
+
+          <View style={{ marginTop: 32, alignItems: "center" }}>
+            <Text style={{ fontWeight: "500" }} onPress={() => router.back()}>
+              Click Here To Return To Sign In Page
+            </Text>
+          </View>
         </View>
       </View>
     </>
@@ -103,7 +104,6 @@ const styles = StyleSheet.create({
     color: "#455fff",
   },
   textInput: {
-    width: 250,
     borderWidth: 1,
     borderRadius: 4,
     borderColor: "#455fff",
@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "blue",
     padding: 10,
-    width: 250,
     borderRadius: 5,
     marginTop: 16,
   },

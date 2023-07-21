@@ -69,7 +69,7 @@ export default function ModalScreen() {
           flex: 1,
           justifyContent: "flex-start",
           alignItems: "center",
-          marginTop: "10%",
+          paddingTop: "10%",
           backgroundColor: "transparent",
         }}
       >

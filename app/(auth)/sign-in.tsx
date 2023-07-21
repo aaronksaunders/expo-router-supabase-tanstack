@@ -24,16 +24,17 @@ export default function SignIn() {
       <View
         style={{
           flex: 1,
-          justifyContent: "top",
+          justifyContent: "flex-start",
           alignItems: "center",
-          marginTop: "20%",
+          paddingTop: "20%",
+          backgroundColor: "#F8F8F9",
         }}
       >
         <Image
           style={styles.image}
           source={require("../../assets/images/hero-image.png")}
         />
-        <View>
+        <View style={{ width: "80%", backgroundColor: "transparent" }}>
           <Text style={styles.label}>Email</Text>
           <TextInput
             placeholder="email"
@@ -44,8 +45,6 @@ export default function SignIn() {
             }}
             style={styles.textInput}
           />
-        </View>
-        <View>
           <Text style={styles.label}>Password</Text>
           <TextInput
             placeholder="password"
@@ -56,32 +55,32 @@ export default function SignIn() {
             }}
             style={styles.textInput}
           />
-        </View>
 
-        <TouchableOpacity
-          onPress={async () => {
-            const { data, error } = await signIn(
-              emailRef.current,
-              passwordRef.current
-            );
-            if (data) {
-              router.replace("/(tabs)/home");
-            } else {
-              console.log("sign in error", error);
-              Alert.alert("Login Error", error?.message);
-            }
-          }}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <View style={{ marginTop: 32 }}>
-          <Text
-            style={{ fontWeight: "500" }}
-            onPress={() => router.push("/sign-up")}
+          <TouchableOpacity
+            onPress={async () => {
+              const { data, error } = await signIn(
+                emailRef.current,
+                passwordRef.current
+              );
+              if (data) {
+                router.replace("/(tabs)/home");
+              } else {
+                console.log("sign in error", error);
+                Alert.alert("Login Error", error?.message);
+              }
+            }}
+            style={styles.button}
           >
-            Click Here To Create A New Account
-          </Text>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+          <View style={{ marginTop: 32, alignItems: "center" }}>
+            <Text
+              style={{ fontWeight: "500" }}
+              onPress={() => router.push("/sign-up")}
+            >
+              Click Here To Create A New Account
+            </Text>
+          </View>
         </View>
       </View>
     </>
@@ -94,7 +93,6 @@ const styles = StyleSheet.create({
     color: "#455fff",
   },
   textInput: {
-    width: 250,
     borderWidth: 1,
     borderRadius: 4,
     borderColor: "#455fff",
@@ -105,7 +103,6 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "blue",
     padding: 10,
-    width: 250,
     borderRadius: 5,
     marginTop: 16,
   },
