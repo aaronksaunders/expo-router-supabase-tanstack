@@ -68,6 +68,7 @@ export function Provider(props: ProviderProps) {
   };
 
   useEffect(() => {
+    if (authInitialized) return;
     supabaseClient.auth.onAuthStateChange((event, session) => {
       console.log("got user", session?.user?.email);
       setAuthInitialized(true);

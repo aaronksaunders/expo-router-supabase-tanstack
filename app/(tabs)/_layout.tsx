@@ -35,7 +35,6 @@ export default function TabLayout() {
       <Tabs.Screen
         name="images"
         options={{
-          unmountOnBlur: true,
           title: "Images",
           headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="image" color={color} />,

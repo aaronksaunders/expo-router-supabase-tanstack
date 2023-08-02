@@ -57,7 +57,7 @@ export default function MyImageList({
       error,
       isFetching,
       isPreviousData,
-    } = useQuery(["images", item.name], () =>
+    } = useQuery(["image", item.name], () =>
       getImageBlobAndConvert(item.name)
     );
 
@@ -83,14 +83,12 @@ export default function MyImageList({
       data={files}
       renderItem={({ item }) => {
         return item.name !== ".emptyFolderPlaceholder" ? (
-          // <Pressable onPress={() => onItemClick(item.name)}>
           <Item item={item} onClick={() => onItemClick(item.name)} />
         ) : (
-          // </Pressable>
           <></>
         );
       }}
-      keyExtractor={(item) => item.name}
+      keyExtractor={(item) => item.id}
     />
   );
 }

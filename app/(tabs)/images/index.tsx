@@ -1,7 +1,4 @@
-import {
-  Dimensions,
-  StyleSheet,
-} from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 import { View } from "@/components/Themed";
 import { supabaseClient } from "../../context/supabase-service";
@@ -12,7 +9,7 @@ import { Stack, useRouter } from "expo-router";
 import { useCamera } from "@/app/hooks/useCamera";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect } from "react";
-import { CamerButton } from "./components/CamerButton";
+import { CamerButton } from "./components/CameraButton";
 
 export default function TabTwoScreen() {
   const router = useRouter();
@@ -20,6 +17,24 @@ export default function TabTwoScreen() {
   const { takePhoto } = useCamera();
 
   const [permission, requestPermission] = ImagePicker.useCameraPermissions();
+
+  console.log("in image list");
+
+  const imageFetcher = async () => {
+    const { data, error } = await supabaseClient.storage.from("images").list();
+    if (error) throw error;
+    return data;
+  };
+
+  const {
+    isLoading,
+    isError,
+    data,
+    error,
+    isFetching,
+    isPreviousData,
+    refetch,
+  } = useQuery({ queryKey: ["images"], queryFn: () => imageFetcher() });
 
   /**
    * used by the camerButton component onPress
@@ -39,29 +54,13 @@ export default function TabTwoScreen() {
     }
   }, []);
 
-  const imageFetcher = async () => {
-    const { data, error } = await supabaseClient.storage.from("images").list();
-    if (error) throw error;
-    return data;
-  };
-
-  const {
-    isLoading,
-    isError,
-    data,
-    error,
-    isFetching,
-    isPreviousData,
-    refetch,
-  } = useQuery(["images"], () => imageFetcher(), { keepPreviousData: true });
-
   return (
     <>
       <Stack.Screen
         options={{
           headerShown: true,
           title: "Image Storage",
-          headerRight: () => <CamerButton onTakePhoto={onTakePhoto} />,
+          headerRight: () => <CamerButton onTakePhoto={() => onTakePhoto()} />,
         }}
       />
       <View style={styles.container}>

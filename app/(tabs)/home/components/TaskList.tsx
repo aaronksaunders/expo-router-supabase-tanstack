@@ -3,12 +3,9 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   Pressable,
 } from "react-native";
-import { useEffect, useState } from "react";
-import { supabaseClient } from "../../../context/supabase-service";
-import { useQuery } from "@tanstack/react-query";
+import { useCallback } from "react";
 
 export default function MyTaskList({
   files,
@@ -22,25 +19,26 @@ export default function MyTaskList({
    * @param param0
    * @returns
    */
-  const Item = ({ item, onClick }: any) => {
-    return (
-      <View style={styles.item}>
-        <Pressable onPress={onClick}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.title}>{item.description}</Text>
-          <Text style={styles.title}>{item.created_at}</Text>
-          <Text style={styles.title}>{item.completed_at}</Text>
-        </Pressable>
-      </View>
-    );
-  };
+  const Item = useCallback(
+    ({ item }: any) => {
+      return (
+        <View style={styles.item}>
+          <Pressable onPress={() => onItemClick(item.id)}>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.title}>{item.description}</Text>
+            <Text style={styles.title}>{item.created_at}</Text>
+            <Text style={styles.title}>{item.completed_at}</Text>
+          </Pressable>
+        </View>
+      );
+    },
+    [onItemClick]
+  );
 
   return (
     <FlatList
       data={files}
-      renderItem={({ item }) => (
-        <Item item={item} onClick={() => onItemClick(item.id)} />
-      )}
+      renderItem={({ item }) => <Item item={item} />}
       keyExtractor={(item) => item.id}
     />
   );
