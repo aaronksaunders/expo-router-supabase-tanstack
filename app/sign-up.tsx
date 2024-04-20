@@ -1,23 +1,26 @@
 import {
   Text,
-  TextInput,
   View,
   StyleSheet,
+  TextInput,
   TouchableOpacity,
   Alert,
   Dimensions,
 } from "react-native";
-import { useAuth } from "../context/auth";
 import { Stack, useRouter } from "expo-router";
 import { useRef } from "react";
 import { Image } from "expo-image";
+import { useSession } from "./context/ctx";
+import { SignInResponse } from "./context/supabase-service";
 
-export default function SignIn() {
-  const { signIn } = useAuth();
+export default function SignUp() {
+  const { signUp } = useSession();
   const router = useRouter();
 
   const emailRef = useRef("");
   const passwordRef = useRef("");
+  const userNameRef = useRef("");
+
   return (
     <>
       <Stack.Screen options={{ title: "sign up", headerShown: false }} />
@@ -32,9 +35,19 @@ export default function SignIn() {
       >
         <Image
           style={styles.image}
-          source={require("../../assets/images/hero-image.png")}
+          source={require("../assets/images/hero-image.png")}
         />
         <View style={{ width: "80%", backgroundColor: "transparent" }}>
+          <Text style={styles.label}>UserName</Text>
+          <TextInput
+            placeholder="Username"
+            autoCapitalize="none"
+            nativeID="userName"
+            onChangeText={(text) => {
+              userNameRef.current = text;
+            }}
+            style={styles.textInput}
+          />
           <Text style={styles.label}>Email</Text>
           <TextInput
             placeholder="email"
@@ -58,27 +71,26 @@ export default function SignIn() {
 
           <TouchableOpacity
             onPress={async () => {
-              const { data, error } = await signIn(
+              const { data, error } = await signUp(
                 emailRef.current,
-                passwordRef.current
-              );
+                passwordRef.current,
+                userNameRef.current
+              ) as SignInResponse;
               if (data) {
-                router.replace("/(tabs)/home");
+                router.replace("/(app)/(tabs)/home");
               } else {
-                console.log("sign in error", error);
+                console.log(error);
                 Alert.alert("Login Error", error?.message);
               }
             }}
             style={styles.button}
           >
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>Create Account</Text>
           </TouchableOpacity>
+
           <View style={{ marginTop: 32, alignItems: "center" }}>
-            <Text
-              style={{ fontWeight: "500" }}
-              onPress={() => router.push("/sign-up")}
-            >
-              Click Here To Create A New Account
+            <Text style={{ fontWeight: "500" }} onPress={() => router.back()}>
+              Click Here To Return To Sign In Page
             </Text>
           </View>
         </View>

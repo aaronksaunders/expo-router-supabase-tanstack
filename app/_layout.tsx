@@ -1,26 +1,16 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Link, SplashScreen, Stack } from "expo-router";
+import { Slot, SplashScreen } from "expo-router";
 import React, { useEffect } from "react";
-import { Pressable, useColorScheme } from "react-native";
-import { Provider, useAuth } from "./context/auth";
+import { SessionProvider,useSession } from "./context/ctx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Colors from "@/constants/Colors";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from "expo-router";
 
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "/(tabs)/home/",
-};
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -39,33 +29,27 @@ export default function RootLayout() {
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
+      console.log("loaded fonts")
     }
   }, [loaded]);
 
-  if (!loaded) {
-    return null;
+  const { user, isLoading } = useSession();
+  console.log("[root layout] ==>", user, isLoading)
+
+  // You can keep the splash screen open, or render a loading screen like we do here.
+  if (isLoading) {
+    return <></>;
   }
-
-  return (
-    <Provider>
-      <RootLayoutNav />
-    </Provider>
-  );
-}
-
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-  const { authInitialized, user } = useAuth();
-
-  if (!authInitialized && !user) return null;
 
   const client = new QueryClient();
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+    <SessionProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={client}>
-        <Stack screenOptions={{ headerShown: false }} />
-      </QueryClientProvider>
-    </ThemeProvider>
+        <Slot />
+        </QueryClientProvider>
+      </GestureHandlerRootView>
+    </SessionProvider>
   );
 }

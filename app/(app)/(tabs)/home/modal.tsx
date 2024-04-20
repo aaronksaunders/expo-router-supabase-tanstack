@@ -1,23 +1,19 @@
-import { StatusBar } from "expo-status-bar";
 import {
   Alert,
-  Platform,
   Pressable,
   StyleSheet,
   useColorScheme,
 } from "react-native";
 
-import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useAuth } from "../../context/auth";
-import { Link, Stack, useRouter } from "expo-router";
-import { useLayoutEffect } from "react";
+import { Stack, useRouter } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
+import { useSession } from "@/app/context/ctx";
 
 export default function ModalScreen() {
-  const { signOut, user } = useAuth();
+  const { signOut, user } = useSession();
   const colorScheme = useColorScheme();
 
   const router = useRouter();

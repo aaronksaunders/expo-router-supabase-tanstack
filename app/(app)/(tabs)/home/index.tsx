@@ -8,7 +8,7 @@ import { Stack, useRouter } from "expo-router";
 import { supabaseClient } from "@/app/context/supabase-service";
 import { useQuery } from "@tanstack/react-query";
 import ProgressBar from "react-native-progress/Bar";
-import MyTaskList from "@/app/(tabs)/home/components/TaskList";
+import MyTaskList from "@/app/(app)/(tabs)/home/components/TaskList";
 import { AddTaskButton } from "./components/AddTaskButton";
 import { ShowProfileInfo } from "./components/ShowProfileInfo";
 
@@ -45,7 +45,7 @@ export default function TabOneScreen() {
 
         <MyTaskList
           files={data}
-          onItemClick={(id: string) => router.push(`/(tabs)/home/${id}`)}
+          onItemClick={(id: string) => router.push(`/(app)/(tabs)/home/${id}`)}
         />
       </View>
     </>

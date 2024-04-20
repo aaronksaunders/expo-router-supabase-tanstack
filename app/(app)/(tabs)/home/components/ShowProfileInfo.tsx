@@ -6,7 +6,7 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 export const ShowProfileInfo = () => {
   const colorScheme = useColorScheme();
   return (
-    <Link href="/(tabs)/home/modal" asChild>
+    <Link href="/(app)/(tabs)/home/modal" asChild>
       <Pressable>
         {({ pressed }) => (
           <FontAwesome

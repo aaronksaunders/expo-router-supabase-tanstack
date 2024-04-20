@@ -1,11 +1,11 @@
-import { Link, Stack, useSearchParams } from 'expo-router';
+import { Link, Stack, useLocalSearchParams } from 'expo-router';
 import { StyleSheet } from 'react-native';
 
 import { Text, View } from '@/components/Themed';
 import { useRoute } from '@react-navigation/native';
 
 export default function NotFoundScreen() {
-  const params = useSearchParams();
+  const params = useLocalSearchParams();
   const route = useRoute()
   return (
     <>
@@ -14,7 +14,7 @@ export default function NotFoundScreen() {
         <Text>{JSON.stringify(route)}</Text>
         <Text style={styles.title}>This screen doesn't exist.</Text>
 
-        <Link href="/(tabs)/home" style={styles.link} replace={true}>
+        <Link href="/(auth)/sign-in" style={styles.link} replace={true}>
           <Text style={styles.linkText}>Go to home screen!</Text>
         </Link>
       </View>

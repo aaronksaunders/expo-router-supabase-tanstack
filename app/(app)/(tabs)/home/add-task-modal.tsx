@@ -14,7 +14,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import Colors from "@/constants/Colors";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabaseClient } from "@/app/context/supabase-service";
-import { useAuth } from "@/app/context/auth";
+import { useSession } from "@/app/context/ctx";
 
 export default function ModalScreen() {
   const colorScheme = useColorScheme();
@@ -23,7 +23,7 @@ export default function ModalScreen() {
   const titleRef = useRef("");
   const descriptionRef = useRef("");
   const router = useRouter();
-  const { user } = useAuth();
+  const { user } = useSession();
 
   const { isError, isSuccess, mutateAsync } = useMutation({
     mutationFn: async ({
@@ -106,7 +106,7 @@ export default function ModalScreen() {
                 });
 
                 // this forces the update
-                router.replace("/(tabs)/home/");
+                router.replace("/(app)/(tabs)/home/");
               } catch (error) {
                 Alert.alert("Create Task Error", (error as Error)?.message);
               }

@@ -1,12 +1,12 @@
 import { View, Text } from "react-native";
-import { Stack, useRouter, useSearchParams } from "expo-router";
+import { Stack, useRouter, useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabaseClient } from "@/app/context/supabase-service";
 import { useEffect, useState } from "react";
 
 export default function ImageDetail() {
   const router = useRouter();
-  const { id } = useSearchParams();
+  const { id } = useLocalSearchParams();
   const [taskData, setTaskData] = useState();
 
   // const { isLoading, isError, data, error, isFetching, isPreviousData } =
