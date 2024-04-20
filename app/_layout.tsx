@@ -56,6 +56,7 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
   const { authInitialized, user } = useAuth();
+  console.log("auth", user)
 
   if (!authInitialized && !user) return null;
 
