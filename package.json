@@ -19,8 +19,10 @@
     "@supabase/supabase-js": "^2.26.0",
     "@tanstack/react-query": "^4.29.25",
     "expo": "^50.0.0",
+    "expo-device": "~5.9.4",
     "expo-font": "~11.10.3",
     "expo-image": "~1.10.6",
+    "expo-image-picker": "~14.7.1",
     "expo-linking": "~6.2.2",
     "expo-router": "~3.4.8",
     "expo-splash-screen": "~0.26.4",
@@ -37,9 +39,7 @@
     "react-native-screens": "~3.29.0",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.6",
-    "supabase": "^1.77.9",
-    "expo-image-picker": "~14.7.1",
-    "expo-device": "~5.9.4"
+    "supabase": "1.162.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

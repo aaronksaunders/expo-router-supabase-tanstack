@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet } from "react-native";
 
 import { View } from "@/components/Themed";
-import { supabaseClient } from "../../context/supabase-service";
+import { supabaseClient } from "../../../context/supabase-service";
 import { useQuery } from "@tanstack/react-query";
 import ProgressBar from "react-native-progress/Bar";
 import MyImageList from "./components/ImageList";
@@ -73,7 +73,7 @@ export default function TabTwoScreen() {
         )}
         <MyImageList
           files={data}
-          onItemClick={(key: string) => router.push(`/(tabs)/images/${key}`)}
+          onItemClick={(key: string) => router.push(`/(app)/(tabs)/images/${key}`)}
         />
       </View>
     </>

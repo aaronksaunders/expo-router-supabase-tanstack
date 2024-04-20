@@ -6,7 +6,7 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 export const AddTaskButton = () => {
   const colorScheme = useColorScheme();
   return (
-    <Link href="/(tabs)/home/add-task-modal" asChild>
+    <Link href="/(app)/(tabs)/home/add-task-modal" asChild>
       <Pressable>
         {({ pressed }) => (
           <FontAwesome
